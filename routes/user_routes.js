@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const { protect } = require('../middlewares/auth_middleware')
 
 const {
   loginUser,
@@ -72,8 +73,10 @@ router.route('/login').post(loginUser);
  * @swagger
  * /api/users:
  *   get:
- *     summary: Get a list of all users with pagination
+ *     summary: Get a list of all users with pagination (requires authentication)
  *     tags: [Users]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: query
  *         name: page
@@ -123,6 +126,6 @@ router.route('/login').post(loginUser);
  *     500:
  *       description: Server error
  */
-router.get("/", getUsers);
+router.route("/").get(protect, getUsers);
 
 module.exports = router
