@@ -120,10 +120,19 @@ router.route('').get(protect, getTasks);
 
 /**
  * @swagger
+ * components:
+ *   securitySchemes:
+ *     BearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ *
  * /api/tasks:
  *   post:
- *     summary: Create a new task
+ *     summary: Create a new task (requires authentication)
  *     tags: [Tasks]
+ *     security:
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -132,23 +141,26 @@ router.route('').get(protect, getTasks);
  *             type: object
  *             required:
  *               - title
+ *               - description
  *               - createdBy
  *             properties:
  *               title:
  *                 type: string
+ *                 description: The title of the task
  *               description:
  *                 type: string
+ *                 description: The description of the task
  *               createdBy:
  *                 type: string
+ *                 description: The user ID of the person created the task
  *               assignedTo:
  *                 type: string
+ *                 description: The user ID of the person the task is assigned to
  *     responses:
- *       201:
- *         description: Task created successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Task'
+ *       200:
+ *         description: Successfully created a task
+ *       401:
+ *         description: Unauthorized, missing or invalid token
  *       500:
  *         description: Server error
  */
@@ -156,42 +168,76 @@ router.route('').post(createTask);
 
 /**
  * @swagger
- * /api/tasks/{taskId}:
+ * /api/tasks/{id}:
  *   put:
- *     summary: Update a task
+ *     summary: Update an existing task (requires authentication)
  *     tags: [Tasks]
+ *     security:
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
- *         name: taskId
+ *         name: id
  *         required: true
- *         schema:
- *           type: string
- *         description: The task ID
+ *         description: The ID of the task to update
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - title
+ *               - description
+ *               - status
  *             properties:
  *               title:
  *                 type: string
+ *                 description: The title of the task
+ *                 example: "Complete the report"
  *               description:
  *                 type: string
+ *                 description: A detailed description of the task
+ *                 example: "Finish the quarterly report for Q1"
  *               status:
  *                 type: string
- *                 enum: [Pending, In Progress, Completed]
+ *                 description: The current status of the task (e.g., 'Incomplete', 'Complete')
+ *                 example: "Incomplete"
  *               assignedTo:
  *                 type: string
+ *                 description: The user ID of the person the task is assigned to
+ *                 example: "userId123"
  *     responses:
  *       200:
- *         description: Task updated successfully
+ *         description: Successfully updated a task
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Task'
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   description: The task's ID
+ *                 title:
+ *                   type: string
+ *                   description: The title of the task
+ *                 description:
+ *                   type: string
+ *                   description: The description of the task
+ *                 status:
+ *                   type: string
+ *                   description: The current status of the task
+ *                 createdBy:
+ *                   type: string
+ *                   description: The user ID of the person who created the task
+ *                 assignedTo:
+ *                   type: string
+ *                   description: The user ID of the person assigned to the task
+ *       400:
+ *         description: Bad request, invalid input data
+ *       401:
+ *         description: Unauthorized, missing or invalid token
  *       404:
- *         description: Task not found
+ *         description: Task not found with the provided ID
  *       500:
  *         description: Server error
  */

@@ -49,13 +49,14 @@ const updateTask = asyncHandler(async (req, res) => {
   logger.info("TaskController::getTasks");
   try {
     const updates = req.body; // Allows partial updates
-    const task = await Task.findByIdAndUpdate(req.params.taskId, updates, { new: true })
+    const task = await TaskModel.findByIdAndUpdate(req.params.taskId, updates, { new: true })
       .populate("assignedTo", "name email");
 
     if (!task) return res.status(404).json({ error: "Task not found" });
 
     res.json(task);
   } catch (error) {
+    logger.error(error);
     res.status(500).json({ error: "Error updating task" });
   }
 });

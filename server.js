@@ -18,6 +18,8 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 app.use('/api/users', require('./routes/user_routes'));
+app.use('/api/tasks', require('./routes/task_routes'));
+
 app.get("/", (req, res) => {
     res.status(200).json({message: "Welcome to IDEA Lab."});
 });
