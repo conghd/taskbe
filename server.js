@@ -36,7 +36,10 @@ const swaggerOptions = {
         },
         servers: [{ url: `${HOST}:${PORT}` }],
     },
-    apis: ["./routes/user_routes.js"], // Points to API route files
+    apis: [
+        "./routes/user_routes.js",
+        "./routes/task_routes.js"
+    ], // Points to API route files
 };
   
 const swaggerSpec = swaggerJsdoc(swaggerOptions);

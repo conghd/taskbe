@@ -18,8 +18,11 @@ const loginUser = asyncHandler(async (req, res) => {
         name,
         email,
       });
-      await user.save();
+    } else {
+        user.name = name;
     }
+
+    await user.save();
 
     // Generate JWT token
     const token = generateAccessToken(user._id);
@@ -33,4 +36,38 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 
-module.exports = { loginUser }
+const getUsers = asyncHandler(async (req, res) => {
+    const { page = 1, limit = 10 } = req.query;
+
+  try {
+    // Calculate the skip value for pagination
+    const skip = (page - 1) * limit;
+
+    // Fetch users with pagination
+    const users = await UserModel.find()
+      .skip(skip)
+      .limit(limit)
+      .select("name email"); // Only return name and email
+
+    // Count the total number of users
+    const totalUsers = await UserModel.countDocuments();
+
+    // Calculate total pages
+    const totalPages = Math.ceil(totalUsers / limit);
+
+    res.json({
+      page,
+      limit,
+      totalPages,
+      totalUsers,
+      users,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+module.exports = {
+    loginUser,
+    getUsers,
+}
