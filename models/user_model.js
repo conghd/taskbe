@@ -10,6 +10,7 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: [true, 'Please input your email'],
     index: true,
+    unique: true,
   },
 
 }, {timestamps: true});
