@@ -8,7 +8,7 @@ module.exports = {
         watch: false, // If true, pm2 will restart when there is a file change, even log files
         env: {
           NODE_ENV: 'production',
-          PORT: '3000'
+          PORT: '5000'
         }
       }
     ]
