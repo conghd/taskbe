@@ -1,3 +1,4 @@
+
 # Task Management API
 
 A backend API for managing tasks with user authentication, task CRUD operations, and task assignment features. This API is built with **Node.js**, **Express**, and **MongoDB** and uses **JWT** for authentication.
@@ -28,75 +29,97 @@ A backend API for managing tasks with user authentication, task CRUD operations,
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/task-management-api.git
-
+git clone https://github.com/conghd/taskbe.git
+```
 
 ### 2. Navigate to the project directory
-```bash
-cd task-management-api
 
+```bash
+cd taskbe
+```
 
 ### 3. Install dependencies
+
 ```bash
 npm install
-
+```
 
 ### 4. Set up environment variables
-Create a .env file in the root of the project and configure the following variables:
 
-    env
-    PORT=5000
-    MONGO_URI=mongodb://localhost:27017/taskdb   # or MongoDB Atlas connection string
-    JWT_SECRET=your_jwt_secret_key
+Create a `.env` file in the root of the project and configure the following variables:
+
+```env
+PORT=5000
+MONGO_URI=mongodb://localhost:27017/taskdb   # or MongoDB Atlas connection string
+JWT_SECRET=your_jwt_secret_key
+```
 
 ### 5. Start the server
+
 Run the following command to start the server:
 
 ```bash
 npm start
-The server will start on http://localhost:5000.
+```
+
+The server will start on `http://localhost:5000`.
 
 ## API Documentation
-API documentation is available through Swagger UI. Once the server is running, navigate to:
 
-```bash
+API documentation is available through **Swagger UI**. Once the server is running, navigate to:
+
+```
 http://localhost:5000/api-docs
+```
+
 Here, you can view and interact with the available API endpoints.
 
 ## Endpoints:
+
 ### 1. User Authentication
-POST /api/users/login: Logs in a user and returns a JWT token.
-POST /api/users/register: Registers a new user.
 
-###2. Tasks Management
-GET /api/tasks: Retrieves a list of tasks with pagination and filtering options.
-POST /api/tasks: Creates a new task.
-GET /api/tasks/:id: Retrieves a task by ID.
-PUT /api/tasks/:id: Updates an existing task.
-DELETE /api/tasks/:id: Deletes a task.
+- **POST** `/api/users/login`: Logs in a user and returns a JWT token.
+- **POST** `/api/users/register`: Registers a new user.
 
-###3. User Management
-GET /api/users: Retrieves a list of all users with pagination.
+### 2. Tasks Management
 
+- **GET** `/api/tasks`: Retrieves a list of tasks with pagination and filtering options.
+- **POST** `/api/tasks`: Creates a new task.
+- **GET** `/api/tasks/:id`: Retrieves a task by ID.
+- **PUT** `/api/tasks/:id`: Updates an existing task.
+- **DELETE** `/api/tasks/:id`: Deletes a task.
+
+### 3. User Management
+
+- **GET** `/api/users`: Retrieves a list of all users with pagination.
 
 ## Authentication
-For endpoints that require authentication, the client must include a JWT token in the Authorization header as follows:
-```
+
+For endpoints that require authentication, the client must include a **JWT token** in the `Authorization` header as follows:
+
+```text
 Authorization: Bearer <your_token>
+```
+
 The token is issued during the login process and should be stored securely on the client.
 
 ## Testing
-Unit Tests
-Unit tests for the API endpoints can be found in the tests/ directory. To run the tests, execute:
+
+### Unit Tests
+
+Unit tests for the API endpoints can be found in the `tests/` directory. To run the tests, execute:
 
 ```bash
 npm test
+```
 
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details.
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
-Express.js
-MongoDB
-JWT
-Swagger UI
+
+- [Express.js](https://expressjs.com/)
+- [MongoDB](https://www.mongodb.com/)
+- [JWT](https://jwt.io/)
+- [Swagger UI](https://swagger.io/tools/swagger-ui/)
