@@ -25,6 +25,7 @@ const getTasks = asyncHandler(async (req, res) => {
     limit = parseInt(limit);
 
     const query = status ? { status } : {}; // Filter by status if provided
+    logger.info(JSON.stringify(query));
 
     const tasks = await TaskModel.find(query)
       .populate("createdBy assignedTo", "name email")
@@ -45,6 +46,20 @@ const getTasks = asyncHandler(async (req, res) => {
   }
 });
 
+
+const getTaskById = asyncHandler(async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id);
+    if (!task) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+    res.json(task);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
 const updateTask = asyncHandler(async (req, res) => {
   logger.info("TaskController::getTasks");
   try {
@@ -61,8 +76,31 @@ const updateTask = asyncHandler(async (req, res) => {
   }
 });
 
+const deleteTask = asyncHandler(async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find the task by ID
+    const task = await TaskModel.findById(id);
+    if (!task) {
+        return res.status(404).json({ message: "Task not found" });
+    }
+
+    // Delete the task
+    await task.deleteOne();
+
+    res.status(200).json({ message: "Task deleted successfully" });
+  } catch (error) {
+      console.error("Error deleting task:", error);
+      res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 module.exports = {
   createTask,
   getTasks,
+  getTaskById,
   updateTask,
+  deleteTask,
 }

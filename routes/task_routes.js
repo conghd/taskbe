@@ -5,6 +5,8 @@ const {
   createTask,
   getTasks,
   updateTask,
+  getTaskById,
+  deleteTask,
 } = require('../controllers/task_controller');
 
 const { protect } = require('../middlewares/auth_middleware')
@@ -168,6 +170,35 @@ router.route('').post(createTask);
 
 /**
  * @swagger
+ * /tasks/{id}:
+ *   get:
+ *     summary: Get a single task by ID (authentication required)
+ *     tags: [Tasks]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The task ID
+ *     responses:
+ *       200:
+ *         description: Task retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/Task"
+ *       404:
+ *         description: Task not found
+ *       401:
+ *         description: Unauthorized - Invalid or missing token
+ */
+router.route("/:id").get(protect, getTaskById);
+
+/**
+ * @swagger
  * /api/tasks/{id}:
  *   put:
  *     summary: Update an existing task (requires authentication)
@@ -243,5 +274,29 @@ router.route('').post(createTask);
  */
 router.route('/:taskId').put(protect, updateTask);
 
+/**
+ * @swagger
+ * /api/tasks/{id}:
+ *   delete:
+ *     summary: Delete a task by ID (authentication required)
+ *     tags: [Tasks]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The task ID
+ *     responses:
+ *       200:
+ *         description: Task deleted successfully
+ *       404:
+ *         description: Task not found
+ *       401:
+ *         description: Unauthorized - Invalid or missing token
+ */
+router.delete("/:id", protect, deleteTask);
 
 module.exports = router
